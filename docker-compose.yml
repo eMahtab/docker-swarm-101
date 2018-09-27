@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  hello:
+    image: hello:1.0
+    deploy:
+      replicas: 3
+    ports:
+      - 3000:3000
+    networks:
+     - web  
+  goodbye:
+    image: goodbye:1.0
+    deploy:
+      replicas: 2
+    ports:
+      - 3001:3000
+    networks:
+     - web  
+  visualizer:
+    image: dockersamples/visualizer:stable
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    ports:
+      - 8080:8080
+    networks:
+     - web  
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+networks:
+  web:
+    driver: overlay
